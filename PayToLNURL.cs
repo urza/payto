@@ -18,7 +18,7 @@ internal class PayToLNURL
     /// <param name="destination">user@domain.tld => either http&LNURL based or DNS_BIP353 based</param>
     public static async Task PayToAddressAsync(string destination)
     {
-        Console.WriteLine("This is lightning address.");
+        Console.WriteLine("This is lightning address");
 
         var lnurl_service = LNURLPay.ExtractUriFromLightningAddress(destination);
 
@@ -59,6 +59,7 @@ internal class PayToLNURL
         /// LNURL PAY - second GET request to get the Bolt11 invoice
         (LNURLPayRequestCallbackResponse? response2, string bolt11invoice) = await PayRequestAsync(request2);
 
+        Console.WriteLine();
         Console.WriteLine($"Got bolt11 invoice: {bolt11invoice}");
         Console.WriteLine("Parsing...");
         var bolt11decoded = ParseBolt11Invoice(bolt11invoice);
@@ -79,6 +80,7 @@ internal class PayToLNURL
             return;
         }
 
+        Console.WriteLine();
         Console.WriteLine("Paying invoice..");
         var payresult = RunCli.ExecuteLightnigCli($"pay {bolt11invoice}");
         Console.WriteLine(payresult);
@@ -112,6 +114,7 @@ internal class PayToLNURL
         ConsoleHelper.WriteLine($"You can send between:", ConsoleColor.DarkYellow);
         Console.Write("Min sendable: "); BtcSatFormat.PrintSatToLNBtc(min_sendable_sat);
         Console.Write("Max sendable: "); BtcSatFormat.PrintSatToLNBtc(max_sendable_sat);
+        Console.WriteLine();
         ConsoleHelper.WriteLine("How much do you want to send? (in sats) (space and _ allowed for visual separation):", ConsoleColor.DarkYellow);
 
         if (!ulong.TryParse(Console.ReadLine()!.Trim().Replace(" ", "").Replace("_", ""), out var amounttosend_sat))
@@ -194,7 +197,7 @@ internal class PayToLNURL
     }
 
     private static bool ConfirmPay(CmdDecodeResponse bolt11decoded)
-    {
+    { 
         Console.WriteLine("pay this bolt11 invoice?");
         Console.WriteLine($"payee: {bolt11decoded.Payee}");
         Console.WriteLine($"amount (sat): {bolt11decoded.AmountMsat / 1000}");

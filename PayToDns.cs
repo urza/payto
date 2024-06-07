@@ -62,7 +62,7 @@ internal class PayToDns
 
 
         Console.WriteLine($"Found this: {dig_result}");
-        Console.WriteLine("Validating DNSSEC");
+        Console.WriteLine("Validating DNSSEC..");
 
         /// now validate dnssec - not possible with std lib, and don't want to bring other dependecies
         /// so let Linux do it. Veryfiyng locally might not work because "the trust chain is broken", so use Cloudflare by default
@@ -77,7 +77,7 @@ internal class PayToDns
         }
         catch(Exception ex)
         {
-            Console.WriteLine("Executing delv command (to verify DNSSEC) failed.");
+            Console.WriteLine("Executing delv command (to verify DNSSEC) failed");
             throw; // end the program here because it was BIP353
         }
 

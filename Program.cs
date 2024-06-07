@@ -10,6 +10,6 @@ if (args.Length == 1)
 }
 
 Console.WriteLine("Usage: payto destination");
-Console.WriteLine("Destination can be bolt11, bolt12, LNURL, lightning address");
+Console.WriteLine("Destination can be Lightning Address, LNURL, BIP353 DNS Payment Instruction or BOLT12 Offer");
 return;
 
