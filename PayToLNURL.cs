@@ -62,7 +62,7 @@ internal class PayToLNURL
 
         Console.WriteLine();
         Console.WriteLine($"Got bolt11 invoice: {bolt11invoice}");
-        Console.WriteLine("Parsing...");
+        //Console.WriteLine("Parsing...");
         var bolt11decoded = ParseBolt11Invoice(bolt11invoice);
 
         /// TODO
@@ -174,7 +174,9 @@ internal class PayToLNURL
     {
         var json_res = RunCli.ExecuteLightnigCli($"decode {bolt11invoice}");
 
-        Console.WriteLine(json_res);
+        // print decoded invoice in json to console
+        //Console.WriteLine(json_res);
+
         var decoded = JsonSerializer.Deserialize<CmdDecodeResponse>(json_res, SourceGenerationContextPayto.Default.CmdDecodeResponse);
 
         if (decoded is null)

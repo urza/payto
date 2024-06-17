@@ -128,7 +128,9 @@ internal class PayToBolt12
     {
         var json_res = RunCli.ExecuteLightnigCli($"decode {input}");
         var decoded = JsonSerializer.Deserialize(json_res, SourceGenerationContextPayto.Default.CmdDecodeResponse);
-        Console.WriteLine(json_res);
+        
+        // prins offer in json format to console
+        //Console.WriteLine(json_res);
         
         if (decoded is null)
             throw new Exception("decoded is null");
