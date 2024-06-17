@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Net.Http.Json;
 using payto.JsonTypes;
 using ExtensionMethods;
+using payto.Utils;
 
 namespace payto;
 
@@ -108,22 +109,14 @@ internal class PayToLNURL
 
     private static ulong GetAmount(LNURLPayServiceResponse response1)
     {
-        var min_sendable_sat = response1!.minSendable / 1000; // show to user in sats
-        var max_sendable_sat = response1.maxSendable / 1000;
+        var min_sendable_msat = response1!.minSendable;
+        var max_sendable_msat = response1.maxSendable;
 
         ConsoleHelper.WriteLine($"You can send between:", ConsoleColor.DarkYellow);
-        Console.Write("Min sendable: "); BtcSatFormat.PrintSatToLNBtc(min_sendable_sat);
-        Console.Write("Max sendable: "); BtcSatFormat.PrintSatToLNBtc(max_sendable_sat);
-        Console.WriteLine();
-        ConsoleHelper.WriteLine("How much do you want to send? (in sats) (space and _ allowed for visual separation):", ConsoleColor.DarkYellow);
+        Console.Write("Min sendable: "); BtcSatFormat.PrintSatToLNBtc(min_sendable_msat / 1000);
+        Console.Write("Max sendable: "); BtcSatFormat.PrintSatToLNBtc(max_sendable_msat / 1000);
 
-        if (!ulong.TryParse(Console.ReadLine()!.Trim().Replace(" ", "").Replace("_", ""), out var amounttosend_sat))
-            throw new Exception("Amount inputted is not a number");
-
-        if (amounttosend_sat < min_sendable_sat || amounttosend_sat > max_sendable_sat)
-            throw new ArgumentOutOfRangeException("Amount is not between min sendable and max sendable");
-
-        return amounttosend_sat * 1000; // return in millisathosi
+        return InputAmount.GetAmountFromUser(min_sendable_msat, max_sendable_msat);
     }
     private static string? GetPayerComment(LNURLPayServiceResponse response1)
     {
@@ -200,7 +193,7 @@ internal class PayToLNURL
     { 
         Console.WriteLine("pay this bolt11 invoice?");
         Console.WriteLine($"payee: {bolt11decoded.Payee}");
-        Console.WriteLine($"amount (sat): {bolt11decoded.AmountMsat / 1000}");
+        Console.WriteLine($"amount (sat): {(bolt11decoded.AmountMsat / 1000).AmountWithSeparators()}");
         Console.WriteLine($"description: {bolt11decoded.Description}");
 
         Console.WriteLine();

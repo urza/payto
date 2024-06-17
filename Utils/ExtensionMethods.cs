@@ -69,5 +69,20 @@ public static class ExtensionMethods
         }
     }
 
-    
+    /// <summary>
+    /// 12345678 => "12_235_678"
+    /// </summary>
+    /// <typeparam name="T">any INumber</typeparam>
+    /// <param name="separator">default is '_'</param>
+    public static string AmountWithSeparators<T>(this T amount, char separator = '_') where T : INumber<T>
+    {
+        return amount.ToString() // "12345678"
+                .Reverse().Chunk(3) // [['8','7','6'],['5','4','3'],['2','1']]
+                .Select(x => x.Reverse()) // [['6','7','8'],['3','4','5'],['1','2']]
+                .Reverse() // //[['1','2'],['3','4','5'],['6','7','8']]
+                .Select(x => new string(x.ToArray())) // ["12", "345", "678"]
+                .Aggregate((acc, curr) => acc + separator + curr); //12_345_678
+    }
+
+
 }

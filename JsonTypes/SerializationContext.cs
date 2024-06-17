@@ -8,6 +8,8 @@ namespace payto.JsonTypes;
 [JsonSerializable(typeof(LNURLPayRequestCallbackResponse))]
 [JsonSerializable(typeof(CmdDecodeResponse))] 
 [JsonSerializable(typeof(CLNbolt12OfferResponse))]
+[JsonSerializable(typeof(ClnPluginList))]
+[JsonSerializable(typeof(ClnCurrencyconvertResult))]
 public partial class SourceGenerationContextPayto : JsonSerializerContext
 {
 }

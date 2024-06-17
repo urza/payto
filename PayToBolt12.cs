@@ -1,6 +1,7 @@
 ﻿using payto.JsonTypes;
 using System.Text.Json;
 using ExtensionMethods;
+using payto.Utils;
 
 namespace payto;
 
@@ -59,6 +60,7 @@ internal class PayToBolt12
         Console.WriteLine(type);
         Console.WriteLine($"\tvalid: {decoded.Valid}");
         Console.WriteLine($"\tamount msat: {decoded.OfferAmountMsat}");
+        Console.WriteLine($"\tamount sat: {(decoded.OfferAmountMsat / 1000).AmountWithSeparators()}");
         Console.WriteLine($"\toffer_description: {decoded.OfferDescription}");
         Console.WriteLine($"\tto node: {decoded.OfferNodeId}");
     }
@@ -70,15 +72,7 @@ internal class PayToBolt12
         /// amount not specified, user can input anything
         if (decoded.OfferAmountMsat <= 0)
         {
-            ConsoleHelper.WriteLine("How many sats do you want to send?", ConsoleColor.DarkYellow);
-            var send_string = Console.ReadLine();
-            var parse = send_string.Trim().Replace(" ", "").Replace("_", "").TryParseNumber<ulong>();
-
-            if (!parse.success)
-                throw new Exception("ERROR parsing amount.");
-
-            amount_to_send_millisatoshi = parse.result * 1000;
-            return amount_to_send_millisatoshi;
+            return InputAmount.GetAmountFromUser(null, null);
         }
 
         /// amount present in offer - use that
@@ -125,9 +119,9 @@ internal class PayToBolt12
     private static void PrintBolt12InvoiceInfo(CmdDecodeResponse bolt12_invoice_decoded)
     {
         Console.WriteLine($"\tinvoice_node_id: {bolt12_invoice_decoded.InvoiceNodeId}");
-        Console.WriteLine($"\tamount msat: {bolt12_invoice_decoded.AmountMsat}");
-        Console.WriteLine($"\tinvoice_amount_msat: {bolt12_invoice_decoded.InvoiceAmountMsat}");
-        Console.WriteLine($"\tinvreq_amount_msat: {bolt12_invoice_decoded.InvreqAmountMsat}");
+        Console.WriteLine($"\tamount sat: {(bolt12_invoice_decoded.AmountMsat / 1000).AmountWithSeparators()}");
+        Console.WriteLine($"\tinvoice_amount_sat: {(bolt12_invoice_decoded.InvoiceAmountMsat / 1000).AmountWithSeparators()}");
+        Console.WriteLine($"\tinvreq_amount_sat: {(bolt12_invoice_decoded.InvreqAmountMsat / 1000).AmountWithSeparators()}");
     }
 
     private static CmdDecodeResponse ClnDecode(string input, string expectedType)
