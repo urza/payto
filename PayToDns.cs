@@ -21,7 +21,7 @@ internal class PayToDns
     /// <exception cref="Exception"></exception>
     public static bool TryQueryDnsInfo(string address)
     {
-        Console.WriteLine($"Trying to find DNS record for {address}");
+        Console.WriteLine($"Trying to find BIP353 - TXT DNS record for {address}");
 
         if (address.StartsWith("₿"))
             address = address.Substring(1);
@@ -51,7 +51,7 @@ internal class PayToDns
 
         if (dig_result.IsEmpty())
         {
-            Console.WriteLine("No DNS record found");
+            Console.WriteLine($"No TXT DNS record for {user}.user._bitcoin-payment.{domain} found");
             return false;
         }
 

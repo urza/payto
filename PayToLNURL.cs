@@ -18,7 +18,7 @@ internal class PayToLNURL
     /// <param name="destination">user@domain.tld => either http&LNURL based or DNS_BIP353 based</param>
     public static async Task PayToAddressAsync(string destination)
     {
-        Console.WriteLine("This is lightning address");
+        Console.WriteLine("Paying to HTTP/LNURLP based lightning address");
 
         var lnurl_service = LNURLPay.ExtractUriFromLightningAddress(destination);
 
@@ -29,7 +29,7 @@ internal class PayToLNURL
 
     public static async Task PayToLNURLAsync(string destination)
     {
-        Console.WriteLine("This is LNURL PAY");
+        Console.WriteLine("Pyaing to LNURLP");
 
         var parsed = LNURLPay.TryParse(destination);
 
@@ -188,7 +188,7 @@ internal class PayToLNURL
             throw new ArgumentNullException("decoded is null");
 
         if (!decoded.Valid)
-            throw new Exception("CLN says not valid bolt11 invoice.");
+            throw new Exception("CLN says not valid bolt11 invoice");
 
         if (decoded.Type != DecodeResultTypes.bolt11_invoice)
             throw new Exception("Decoded type is not botl11 invoice");
@@ -204,8 +204,8 @@ internal class PayToLNURL
         Console.WriteLine($"description: {bolt11decoded.Description}");
 
         Console.WriteLine();
-        ConsoleHelper.WriteLine("Confirm payment (y) or cancel (n)", ConsoleColor.DarkYellow);
+        ConsoleHelper.WriteLine("Confirm payment (y/yes) or cancel (n)", ConsoleColor.DarkYellow);
 
-        return Console.ReadLine() == "y";
+        return Console.ReadLine()?.ToLower() is "y" or "yes";
     }
 }

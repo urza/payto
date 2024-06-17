@@ -67,7 +67,7 @@ internal class PayTo
             return DestinationType.LNURL_PAYREQUEST;
         }
 
-        throw new ArgumentException("The destination is not recognized as valid target. Might be lightning@adedress.tld or bolt12 offer or LNURL ");
+        throw new ArgumentException("The destination is not recognized as valid target. Must be lightning@address.domain or bolt12 offer or LNURLP ");
     }
 
     internal static async Task PayToDestinationAsync(string destination)

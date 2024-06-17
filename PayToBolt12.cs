@@ -40,7 +40,7 @@ internal class PayToBolt12
 
         ConsoleHelper.WriteLine("Do you want to pay this invoice? (y / n)", ConsoleColor.DarkYellow);
 
-        if (Console.ReadLine() != "y")
+        if (Console.ReadLine()?.ToLower() is not ("y" or "yes"))
         {
             Console.WriteLine("CANCELED!");
             return;
